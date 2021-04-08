@@ -1,0 +1,17 @@
+org/jroots/queueing/health/TemplateHealthCheck.class
+org/jroots/queueing/QueueLimiterConfiguration.class
+org/jroots/queueing/client/database/DynamoDbClient.class
+org/jroots/queueing/configuration/ServicesConfiguration.class
+org/jroots/queueing/QueueLimiterApplication.class
+org/jroots/queueing/service/LimiterService.class
+org/jroots/queueing/client/producer/QueueProducer.class
+org/jroots/queueing/api/Message.class
+org/jroots/queueing/client/consumer/RabbitConsumer.class
+org/jroots/queueing/resources/DummyResource.class
+org/jroots/queueing/client/consumer/QueueConsumer.class
+org/jroots/queueing/service/CacheService.class
+org/jroots/queueing/client/database/LimitsDatabaseClient.class
+org/jroots/queueing/client/consumer/SqsConsumer.class
+org/jroots/queueing/service/HandlerService.class
+org/jroots/queueing/client/producer/SqsProducer.class
+org/jroots/queueing/client/producer/RabbitProducer.class

@@ -1,0 +1,19 @@
+server:
+  applicationConnectors:
+    - type: http
+      port: 9090
+  adminConnectors:
+    - type: http
+      port: 9091
+
+logging:
+  level: INFO
+  loggers:
+    org.jroots.queueing: DEBUG
+
+template: Hello, %s!
+defaultName: Stranger
+
+inboundSqsUrl: https://sqs.us-east-1.amazonaws.com/328945660164/rate_limiter_entry_queue
+outboundSqsUrl: https://sqs.us-east-1.amazonaws.com/328945660164/rate_limiter_exit_queue
+limitsTableName: rate_limiter_limits
