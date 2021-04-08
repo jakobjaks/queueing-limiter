@@ -1,0 +1,99 @@
+{
+    "ipcMode": null,
+    "executionRoleArn": "arn:aws:iam::328945660164:role/ecsTaskExecutionRole",
+    "containerDefinitions": [
+        {
+            "dnsSearchDomains": null,
+            "environmentFiles": null,
+            "logConfiguration": null,
+            "entryPoint": null,
+            "portMappings": [
+                {
+                    "hostPort": 8081,
+                    "protocol": "tcp",
+                    "containerPort": 8081
+                }
+            ],
+            "command": null,
+            "linuxParameters": null,
+            "cpu": 0,
+            "environment": [],
+            "resourceRequirements": null,
+            "ulimits": null,
+            "dnsServers": null,
+            "mountPoints": [],
+            "workingDirectory": null,
+            "secrets": null,
+            "dockerSecurityOptions": null,
+            "memory": 256,
+            "memoryReservation": null,
+            "volumesFrom": [],
+            "stopTimeout": null,
+            "image": "jakobjaks/queue_limiter:firsttry",
+            "startTimeout": null,
+            "firelensConfiguration": null,
+            "dependsOn": null,
+            "disableNetworking": null,
+            "interactive": null,
+            "healthCheck": {
+                "retries": 3,
+                "command": [
+                    "curl -f http://localhost:8081 || exit 1"
+                ],
+                "timeout": 5,
+                "interval": 30,
+                "startPeriod": null
+            },
+            "essential": true,
+            "links": null,
+            "hostname": null,
+            "extraHosts": null,
+            "pseudoTerminal": null,
+            "user": null,
+            "readonlyRootFilesystem": null,
+            "dockerLabels": null,
+            "systemControls": null,
+            "privileged": null,
+            "name": "queue_limiter"
+        }
+    ],
+    "placementConstraints": [],
+    "memory": "256",
+    "taskRoleArn": "arn:aws:iam::328945660164:role/ecsTaskExecutionRole",
+    "compatibilities": [
+        "EC2"
+    ],
+    "taskDefinitionArn": "arn:aws:ecs:us-east-1:328945660164:task-definition/queue-limiter-task:1",
+    "family": "queue-limiter-task",
+    "requiresAttributes": [
+        {
+            "targetId": null,
+            "targetType": null,
+            "value": null,
+            "name": "com.amazonaws.ecs.capability.docker-remote-api.1.24"
+        },
+        {
+            "targetId": null,
+            "targetType": null,
+            "value": null,
+            "name": "com.amazonaws.ecs.capability.task-iam-role"
+        },
+        {
+            "targetId": null,
+            "targetType": null,
+            "value": null,
+            "name": "ecs.capability.container-health-check"
+        }
+    ],
+    "pidMode": null,
+    "requiresCompatibilities": [
+        "EC2"
+    ],
+    "networkMode": null,
+    "cpu": "256",
+    "revision": 1,
+    "status": "ACTIVE",
+    "inferenceAccelerators": null,
+    "proxyConfiguration": null,
+    "volumes": []
+}
