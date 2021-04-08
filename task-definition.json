@@ -34,7 +34,7 @@
             "memoryReservation": null,
             "volumesFrom": [],
             "stopTimeout": null,
-            "image": "jakobjaks/queue_limiter:firsttry",
+            "image": "328945660164.dkr.ecr.us-east-1.amazonaws.com/rate-limiter-repo:latest",
             "startTimeout": null,
             "firelensConfiguration": null,
             "dependsOn": null,
@@ -68,7 +68,7 @@
     "compatibilities": [
         "EC2"
     ],
-    "taskDefinitionArn": "arn:aws:ecs:us-east-1:328945660164:task-definition/queue-limiter-task:3",
+    "taskDefinitionArn": "arn:aws:ecs:us-east-1:328945660164:task-definition/queue-limiter-task:6",
     "family": "queue-limiter-task",
     "requiresAttributes": [
         {
@@ -81,6 +81,12 @@
             "targetId": null,
             "targetType": null,
             "value": null,
+            "name": "com.amazonaws.ecs.capability.ecr-auth"
+        },
+        {
+            "targetId": null,
+            "targetType": null,
+            "value": null,
             "name": "com.amazonaws.ecs.capability.task-iam-role"
         },
         {
@@ -88,6 +94,12 @@
             "targetType": null,
             "value": null,
             "name": "ecs.capability.container-health-check"
+        },
+        {
+            "targetId": null,
+            "targetType": null,
+            "value": null,
+            "name": "ecs.capability.execution-role-ecr-pull"
         }
     ],
     "pidMode": null,
@@ -96,7 +108,7 @@
     ],
     "networkMode": null,
     "cpu": "256",
-    "revision": 3,
+    "revision": 6,
     "status": "ACTIVE",
     "inferenceAccelerators": null,
     "proxyConfiguration": null,
