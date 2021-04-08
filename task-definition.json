@@ -9,9 +9,14 @@
             "entryPoint": null,
             "portMappings": [
                 {
-                    "hostPort": 8081,
+                    "hostPort": 8083,
                     "protocol": "tcp",
-                    "containerPort": 8081
+                    "containerPort": 8083
+                },
+                {
+                    "hostPort": 8082,
+                    "protocol": "tcp",
+                    "containerPort": 8082
                 }
             ],
             "command": null,
@@ -34,7 +39,7 @@
             "memoryReservation": null,
             "volumesFrom": [],
             "stopTimeout": null,
-            "image": "328945660164.dkr.ecr.us-east-1.amazonaws.com/rate-limiter-repo:latest",
+            "image": "328945660164.dkr.ecr.us-east-1.amazonaws.com/queue-limiter-repo:e325c9bcd0df9e1ec6ac9dc4d85ebc335f34a3ed",
             "startTimeout": null,
             "firelensConfiguration": null,
             "dependsOn": null,
@@ -43,7 +48,7 @@
             "healthCheck": {
                 "retries": 3,
                 "command": [
-                    "curl -f http://localhost:8081 || exit 1"
+                    "curl -f http://localhost:8083 || exit 1"
                 ],
                 "timeout": 5,
                 "interval": 30,
@@ -68,7 +73,7 @@
     "compatibilities": [
         "EC2"
     ],
-    "taskDefinitionArn": "arn:aws:ecs:us-east-1:328945660164:task-definition/queue-limiter-task:6",
+    "taskDefinitionArn": "arn:aws:ecs:us-east-1:328945660164:task-definition/queue-limiter-task:11",
     "family": "queue-limiter-task",
     "requiresAttributes": [
         {
@@ -108,7 +113,7 @@
     ],
     "networkMode": null,
     "cpu": "256",
-    "revision": 6,
+    "revision": 11,
     "status": "ACTIVE",
     "inferenceAccelerators": null,
     "proxyConfiguration": null,
