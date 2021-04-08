@@ -59,7 +59,7 @@
             "dockerLabels": null,
             "systemControls": null,
             "privileged": null,
-            "name": "queue_limiter"
+            "name": "queue-limiter"
         }
     ],
     "placementConstraints": [],
@@ -68,7 +68,7 @@
     "compatibilities": [
         "EC2"
     ],
-    "taskDefinitionArn": "arn:aws:ecs:us-east-1:328945660164:task-definition/queue-limiter-task:2",
+    "taskDefinitionArn": "arn:aws:ecs:us-east-1:328945660164:task-definition/queue-limiter-task:3",
     "family": "queue-limiter-task",
     "requiresAttributes": [
         {
@@ -96,7 +96,7 @@
     ],
     "networkMode": null,
     "cpu": "256",
-    "revision": 2,
+    "revision": 3,
     "status": "ACTIVE",
     "inferenceAccelerators": null,
     "proxyConfiguration": null,
