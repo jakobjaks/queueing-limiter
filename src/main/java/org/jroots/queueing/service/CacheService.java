@@ -10,6 +10,7 @@ import io.github.bucket4j.Bucket4j;
 import io.github.bucket4j.grid.GridBucketState;
 import io.github.bucket4j.grid.RecoveryStrategy;
 import io.github.bucket4j.grid.hazelcast.Hazelcast;
+import org.jroots.queueing.QueueLimiterConfiguration;
 import org.jroots.queueing.api.Message;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -25,10 +26,12 @@ public class CacheService {
     private IMap<String, GridBucketState> map;
 
     private Bucket bucket;
+    private final QueueLimiterConfiguration configuration;
 
     private final Logger logger = LoggerFactory.getLogger(CacheService.class);
 
-    public CacheService() {
+    public CacheService(QueueLimiterConfiguration configuration) {
+        this.configuration = configuration;
         var clientConfig = createClientConfig();
         HazelcastInstance client = HazelcastClient.newHazelcastClient(clientConfig);
 
@@ -48,7 +51,7 @@ public class CacheService {
                 identifier = "test";
             }
             if (map.containsKey(identifier)) {
-                logger.info("Getting existing bucket");
+                logger.info("Getting existing bucket for identifier {}", message.getIdentifier());
                 logger.info("Numbers of tokens before consuming {}", bucket.getAvailableTokens());
                 secondsLeft = TimeUnit.NANOSECONDS.toSeconds(bucket.estimateAbilityToConsume(1).getNanosToWaitForRefill());
                 if (secondsLeft < 60) {
@@ -72,8 +75,10 @@ public class CacheService {
 
 
     public ClientConfig createClientConfig() {
+        var hazelcastIp = configuration.getHazelcastClusterIp();
+        logger.info("Connect to Hazelcast using IP: {}", hazelcastIp);
         ClientConfig clientConfig = new ClientConfig();
-        clientConfig.getNetworkConfig().addAddress("34.226.122.222", "34.226.122.222:5701");
+        clientConfig.getNetworkConfig().addAddress(hazelcastIp, hazelcastIp + "5701");
         return clientConfig;
     }
 }

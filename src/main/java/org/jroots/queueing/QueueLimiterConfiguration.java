@@ -22,6 +22,9 @@ public class QueueLimiterConfiguration extends Configuration {
     @NotEmpty
     private String limitsTableName;
 
+    @NotEmpty
+    private String hazelcastClusterIp;
+
     @JsonProperty
     public String getTemplate() {
         return template;
@@ -68,5 +71,13 @@ public class QueueLimiterConfiguration extends Configuration {
 
     public void setLimitsTableName(String limitsTableName) {
         this.limitsTableName = limitsTableName;
+    }
+
+    public String getHazelcastClusterIp() {
+        return hazelcastClusterIp;
+    }
+
+    public void setHazelcastClusterIp(String hazelcastClusterIp) {
+        this.hazelcastClusterIp = hazelcastClusterIp;
     }
 }

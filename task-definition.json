@@ -17,7 +17,12 @@
             "command": null,
             "linuxParameters": null,
             "cpu": 0,
-            "environment": [],
+            "environment": [
+                {
+                    "name": "HAZELCAST_CLUSTER_IP",
+                    "value": "18.204.205.243"
+                }
+            ],
             "resourceRequirements": null,
             "ulimits": null,
             "dnsServers": null,
@@ -63,7 +68,7 @@
     "compatibilities": [
         "EC2"
     ],
-    "taskDefinitionArn": "arn:aws:ecs:us-east-1:328945660164:task-definition/queue-limiter-task:1",
+    "taskDefinitionArn": "arn:aws:ecs:us-east-1:328945660164:task-definition/queue-limiter-task:2",
     "family": "queue-limiter-task",
     "requiresAttributes": [
         {
@@ -91,7 +96,7 @@
     ],
     "networkMode": null,
     "cpu": "256",
-    "revision": 1,
+    "revision": 2,
     "status": "ACTIVE",
     "inferenceAccelerators": null,
     "proxyConfiguration": null,

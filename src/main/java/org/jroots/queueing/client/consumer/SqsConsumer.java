@@ -45,8 +45,10 @@ public class SqsConsumer implements QueueConsumer {
                     requests.mark();
                     handlerService.handlePayload(internalMessage)
                             .thenAccept(timeLeft -> {
+                                logger.info("Deleting message with id {}", internalMessage.getUUID());
                                 deleteMessage(message.getReceiptHandle());
                                 if (timeLeft > 60) {
+                                    logger.info("Resending message with id {}", internalMessage.getUUID());
                                     resendMessage(internalMessage, timeLeft);
                                 }
                             });

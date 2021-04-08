@@ -24,7 +24,7 @@ public class ServicesConfiguration {
     private final ApplicationContext applicationContext;
     private final Environment environment;
 
-    private LimiterService limiterService;
+    private final LimiterService limiterService;
 
     public ServicesConfiguration(@Nonnull ApplicationContext applicationContext) {
         this.applicationContext = applicationContext;
@@ -42,7 +42,7 @@ public class ServicesConfiguration {
 
     @Bean
     CacheService cacheService() {
-        return new CacheService();
+        return new CacheService(configuration);
     }
 
     @Bean

@@ -17,3 +17,5 @@ defaultName: Stranger
 inboundSqsUrl: https://sqs.us-east-1.amazonaws.com/328945660164/rate_limiter_entry_queue
 outboundSqsUrl: https://sqs.us-east-1.amazonaws.com/328945660164/rate_limiter_exit_queue
 limitsTableName: rate_limiter_limits
+
+hazelcastClusterIp: ${HAZELCAST_CLUSTER_IP}

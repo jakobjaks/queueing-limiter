@@ -1,6 +1,8 @@
 package org.jroots.queueing;
 
 import io.dropwizard.Application;
+import io.dropwizard.configuration.EnvironmentVariableSubstitutor;
+import io.dropwizard.configuration.SubstitutingSourceProvider;
 import io.dropwizard.setup.Bootstrap;
 import io.dropwizard.setup.Environment;
 import org.jroots.queueing.configuration.ServicesConfiguration;
@@ -28,7 +30,10 @@ public class QueueLimiterApplication extends Application<QueueLimiterConfigurati
 
     @Override
     public void initialize(final Bootstrap<QueueLimiterConfiguration> bootstrap) {
-        // TODO: application initialization
+        bootstrap.setConfigurationSourceProvider(
+                new SubstitutingSourceProvider(bootstrap.getConfigurationSourceProvider(),
+                        new EnvironmentVariableSubstitutor(false)
+                ));
     }
 
     @Override
