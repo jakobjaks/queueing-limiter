@@ -26,24 +26,35 @@ public class CacheService {
     private IMap<String, GridBucketState> map;
 
     private Bucket bucket;
+    private HazelcastInstance hazelcastInstance;
     private final QueueLimiterConfiguration configuration;
 
     private final Logger logger = LoggerFactory.getLogger(CacheService.class);
 
     public CacheService(QueueLimiterConfiguration configuration) {
         this.configuration = configuration;
-        var clientConfig = createClientConfig();
-        HazelcastInstance client = HazelcastClient.newHazelcastClient(clientConfig);
-
-        map = client.getMap("rate-limits"); //creates the map proxy
-
-        bucket = Bucket4j.extension(Hazelcast.class).builder()
-                .addLimit(Bandwidth.simple(3, Duration.ofMinutes(1)))
-                .build(map, "newlimit", RecoveryStrategy.RECONSTRUCT);
-
     }
 
+    private void startConnection() {
+        try {
+            var clientConfig = createClientConfig();
+            hazelcastInstance = HazelcastClient.newHazelcastClient(clientConfig);
+
+            map = hazelcastInstance.getMap("rate-limits"); //creates the map proxy
+
+            bucket = Bucket4j.extension(Hazelcast.class).builder()
+                    .addLimit(Bandwidth.simple(3, Duration.ofMinutes(1)))
+                    .build(map, "newlimit", RecoveryStrategy.RECONSTRUCT);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+
     public CompletableFuture<Long> consumeTokens(Message message, int limit) {
+        if (hazelcastInstance == null) {
+            startConnection();
+        }
         return CompletableFuture.supplyAsync(() -> {
             var identifier = message.getIdentifier();
             long secondsLeft;
@@ -70,8 +81,6 @@ public class CacheService {
             return secondsLeft;
         });
     }
-
-
 
 
     public ClientConfig createClientConfig() {
