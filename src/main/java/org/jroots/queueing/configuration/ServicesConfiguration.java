@@ -66,8 +66,8 @@ public class ServicesConfiguration {
     @Bean
     public Executor threadPoolTaskExecutor() {
         ThreadPoolTaskExecutor executor = new ThreadPoolTaskExecutor();
-        executor.setCorePoolSize(10);
-        executor.setMaxPoolSize(10);
+        executor.setCorePoolSize(3);
+        executor.setMaxPoolSize(6);
         executor.setThreadNamePrefix("sqsExecutor");
         executor.initialize();
         return executor;

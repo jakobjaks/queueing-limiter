@@ -40,14 +40,15 @@ public class SqsConsumer implements QueueConsumer {
 
     @Override
     public void startConsuming() {
-        ThreadPoolExecutor executor =
+        ThreadPoolExecutor pollExecutor =
                 (ThreadPoolExecutor) Executors.newFixedThreadPool(1);
-        executor.submit(() -> {
+        pollExecutor.submit(() -> {
             logger.info("===STARTED CONSUMING===");
             while (true) {
                 try {
                     logger.info("In while loop for executor");
                     var request = new ReceiveMessageRequest().withWaitTimeSeconds(20).withQueueUrl(sqsUrl);
+
                     var messages = amazonSQSClient.receiveMessage(request).getMessages();
 
                     for (var message : messages) {
@@ -65,6 +66,7 @@ public class SqsConsumer implements QueueConsumer {
                                         }
                                     });
                         });
+
                     }
                 } catch (Exception e) {
                     e.printStackTrace();
