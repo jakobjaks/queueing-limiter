@@ -25,7 +25,7 @@
             "environment": [
                 {
                     "name": "HAZELCAST_CLUSTER_IP",
-                    "value": "18.204.205.243"
+                    "value": "52.55.2.229"
                 }
             ],
             "resourceRequirements": null,
@@ -35,25 +35,17 @@
             "workingDirectory": null,
             "secrets": null,
             "dockerSecurityOptions": null,
-            "memory": 256,
+            "memory": 500,
             "memoryReservation": null,
             "volumesFrom": [],
             "stopTimeout": null,
-            "image": "328945660164.dkr.ecr.us-east-1.amazonaws.com/queue-limiter-repo:e325c9bcd0df9e1ec6ac9dc4d85ebc335f34a3ed",
+            "image": "328945660164.dkr.ecr.us-east-1.amazonaws.com/queue-limiter-repo:c5fed29e2be01795443926033ac8d106dc46d765",
             "startTimeout": null,
             "firelensConfiguration": null,
             "dependsOn": null,
             "disableNetworking": null,
             "interactive": null,
-            "healthCheck": {
-                "retries": 3,
-                "command": [
-                    "curl -f http://localhost:8083 || exit 1"
-                ],
-                "timeout": 5,
-                "interval": 30,
-                "startPeriod": null
-            },
+            "healthCheck": null,
             "essential": true,
             "links": null,
             "hostname": null,
@@ -68,20 +60,14 @@
         }
     ],
     "placementConstraints": [],
-    "memory": "256",
+    "memory": "500",
     "taskRoleArn": "arn:aws:iam::328945660164:role/ecsTaskExecutionRole",
     "compatibilities": [
         "EC2"
     ],
-    "taskDefinitionArn": "arn:aws:ecs:us-east-1:328945660164:task-definition/queue-limiter-task:11",
+    "taskDefinitionArn": "arn:aws:ecs:us-east-1:328945660164:task-definition/queue-limiter-task:18",
     "family": "queue-limiter-task",
     "requiresAttributes": [
-        {
-            "targetId": null,
-            "targetType": null,
-            "value": null,
-            "name": "com.amazonaws.ecs.capability.docker-remote-api.1.24"
-        },
         {
             "targetId": null,
             "targetType": null,
@@ -98,12 +84,6 @@
             "targetId": null,
             "targetType": null,
             "value": null,
-            "name": "ecs.capability.container-health-check"
-        },
-        {
-            "targetId": null,
-            "targetType": null,
-            "value": null,
             "name": "ecs.capability.execution-role-ecr-pull"
         }
     ],
@@ -112,8 +92,8 @@
         "EC2"
     ],
     "networkMode": null,
-    "cpu": "256",
-    "revision": 11,
+    "cpu": "500",
+    "revision": 18,
     "status": "ACTIVE",
     "inferenceAccelerators": null,
     "proxyConfiguration": null,
