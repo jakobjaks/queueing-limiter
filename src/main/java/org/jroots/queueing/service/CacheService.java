@@ -5,9 +5,9 @@ import com.hazelcast.client.config.ClientConfig;
 import com.hazelcast.core.HazelcastInstance;
 import com.hazelcast.map.IMap;
 import io.github.bucket4j.Bandwidth;
-import io.github.bucket4j.Bucket;
 import io.github.bucket4j.Bucket4j;
 import io.github.bucket4j.grid.GridBucketState;
+import io.github.bucket4j.grid.ProxyManager;
 import io.github.bucket4j.grid.RecoveryStrategy;
 import io.github.bucket4j.grid.hazelcast.Hazelcast;
 import org.jroots.queueing.QueueLimiterConfiguration;
@@ -24,8 +24,8 @@ public class CacheService {
 
     @Inject
     private IMap<String, GridBucketState> map;
+    private ProxyManager<String> buckets;
 
-    private Bucket bucket;
     private HazelcastInstance hazelcastInstance;
     private final QueueLimiterConfiguration configuration;
 
@@ -42,9 +42,7 @@ public class CacheService {
 
             map = hazelcastInstance.getMap("rate-limits"); //creates the map proxy
 
-            bucket = Bucket4j.extension(Hazelcast.class).builder()
-                    .addLimit(Bandwidth.simple(3, Duration.ofMinutes(1)))
-                    .build(map, "newlimit", RecoveryStrategy.RECONSTRUCT);
+            buckets = Bucket4j.extension(Hazelcast.class).proxyManagerForMap(map);
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -61,9 +59,13 @@ public class CacheService {
             if (identifier == null) {
                 identifier = "test";
             }
-            if (map.containsKey(identifier)) {
+            var bucketO = buckets.getProxy(identifier);
+            if (bucketO.isPresent()) {
+                var bucket = bucketO.get();
+
                 logger.info("Getting existing bucket for identifier {}", message.getIdentifier());
                 logger.info("Numbers of tokens before consuming {}", bucket.getAvailableTokens());
+
                 secondsLeft = TimeUnit.NANOSECONDS.toSeconds(bucket.estimateAbilityToConsume(1).getNanosToWaitForRefill());
                 if (secondsLeft < 60) {
                     bucket.consumeIgnoringRateLimits(1);
@@ -72,8 +74,8 @@ public class CacheService {
                 logger.info("Time left to acquire new tokens {}", TimeUnit.NANOSECONDS.toSeconds(bucket.estimateAbilityToConsume(1).getNanosToWaitForRefill()));
             } else {
                 logger.info("Creating a new bucket");
-                bucket = Bucket4j.extension(Hazelcast.class).builder()
-                        .addLimit(Bandwidth.simple(limit, Duration.ofMinutes(1)))
+                var bucket = Bucket4j.extension(Hazelcast.class).builder()
+                        .addLimit(Bandwidth.simple(limit, Duration.ofSeconds(1)))
                         .build(map, identifier, RecoveryStrategy.THROW_BUCKET_NOT_FOUND_EXCEPTION);
                 bucket.tryConsume(1);
                 secondsLeft = TimeUnit.NANOSECONDS.toSeconds(bucket.estimateAbilityToConsume(1).getNanosToWaitForRefill());
