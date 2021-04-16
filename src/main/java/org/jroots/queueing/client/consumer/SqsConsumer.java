@@ -7,12 +7,14 @@ import com.amazonaws.services.sqs.model.SendMessageRequest;
 import com.codahale.metrics.Meter;
 import com.codahale.metrics.MetricRegistry;
 import com.codahale.metrics.jmx.JmxReporter;
+import io.prometheus.client.exporter.HTTPServer;
 import org.jroots.queueing.QueueLimiterConfiguration;
 import org.jroots.queueing.api.Message;
 import org.jroots.queueing.service.HandlerService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import java.io.IOException;
 import java.util.concurrent.Executor;
 import java.util.concurrent.Executors;
 import java.util.concurrent.ThreadPoolExecutor;
@@ -34,8 +36,11 @@ public class SqsConsumer implements QueueConsumer {
         this.executor = executor;
         sqsUrl = configuration.getInboundSqsUrl();
         amazonSQSClient = AmazonSQSClientBuilder.standard().withRegion("us-east-1").build();
-        final JmxReporter reporter = JmxReporter.forRegistry(metrics).build();
-        reporter.start();
+        try {
+            new HTTPServer(9093);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 
     @Override
