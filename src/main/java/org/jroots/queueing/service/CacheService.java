@@ -6,6 +6,8 @@ import com.hazelcast.core.HazelcastInstance;
 import com.hazelcast.map.IMap;
 import io.github.bucket4j.Bandwidth;
 import io.github.bucket4j.Bucket4j;
+import io.github.bucket4j.BucketConfiguration;
+import io.github.bucket4j.TokensInheritanceStrategy;
 import io.github.bucket4j.grid.GridBucketState;
 import io.github.bucket4j.grid.ProxyManager;
 import io.github.bucket4j.grid.RecoveryStrategy;
@@ -62,6 +64,14 @@ public class CacheService {
             var bucketO = buckets.getProxy(identifier);
             if (bucketO.isPresent()) {
                 var bucket = bucketO.get();
+                var bandWidths = map.get(identifier).getConfiguration().getBandwidths();
+                if (bandWidths[0].getCapacity() != limit) {
+                    Bandwidth newLimit = Bandwidth.simple(limit, Duration.ofSeconds(1));
+                    BucketConfiguration newConfiguration = Bucket4j.configurationBuilder()
+                            .addLimit(newLimit)
+                            .build();
+                    bucket.replaceConfiguration(newConfiguration, TokensInheritanceStrategy.AS_IS);
+                }
 
                 logger.info("Getting existing bucket for identifier {}", message.getIdentifier());
                 logger.info("Numbers of tokens before consuming {}", bucket.getAvailableTokens());

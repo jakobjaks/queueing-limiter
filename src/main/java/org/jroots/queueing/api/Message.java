@@ -9,6 +9,9 @@ public class Message {
     private String id;
     private String content;
     private String identifier;
+    private int requeueCounter;
+
+
     private String receiptHandle;
 
     public Message() {
@@ -75,5 +78,13 @@ public class Message {
             e.printStackTrace();
         }
         return message;
+    }
+
+    public void setRequeueCounter(int requeueCounter) {
+        this.requeueCounter = requeueCounter;
+    }
+
+    public int getRequeueCounter() {
+        return requeueCounter;
     }
 }
