@@ -1,13 +1,11 @@
 package org.jroots.queueing.client.database;
 
+import com.amazon.dax.client.dynamodbv2.AmazonDaxClientBuilder;
 import com.amazonaws.services.dynamodbv2.AmazonDynamoDB;
 import com.amazonaws.services.dynamodbv2.AmazonDynamoDBClientBuilder;
-import com.amazonaws.services.dynamodbv2.document.DynamoDB;
-import com.amazonaws.services.dynamodbv2.document.Table;
 import com.amazonaws.services.dynamodbv2.model.AttributeValue;
 import com.amazonaws.services.dynamodbv2.model.GetItemRequest;
 import org.jroots.queueing.QueueLimiterConfiguration;
-import org.jroots.queueing.client.consumer.SqsConsumer;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -23,7 +21,8 @@ public class DynamoDbClient implements LimitsDatabaseClient {
 
     public DynamoDbClient(QueueLimiterConfiguration configuration) {
         this.configuration = configuration;
-        AmazonDynamoDBClientBuilder dynamoClientBuilder = AmazonDynamoDBClientBuilder.standard();
+        AmazonDaxClientBuilder dynamoClientBuilder = AmazonDaxClientBuilder.standard();
+        dynamoClientBuilder.withEndpointConfiguration(configuration.getDaxUrl());
         dynamoClientBuilder.setRegion("us-east-1");
         amazonDynamoDBClient = dynamoClientBuilder.build();
     }

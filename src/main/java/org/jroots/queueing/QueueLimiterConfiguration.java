@@ -2,7 +2,6 @@ package org.jroots.queueing;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 import io.dropwizard.Configuration;
-import org.springframework.stereotype.Component;
 
 import javax.validation.constraints.NotEmpty;
 
@@ -21,6 +20,9 @@ public class QueueLimiterConfiguration extends Configuration {
 
     @NotEmpty
     private String limitsTableName;
+
+    @NotEmpty
+    private String daxUrl;
 
     @NotEmpty
     private String hazelcastClusterIp;
@@ -79,5 +81,13 @@ public class QueueLimiterConfiguration extends Configuration {
 
     public void setHazelcastClusterIp(String hazelcastClusterIp) {
         this.hazelcastClusterIp = hazelcastClusterIp;
+    }
+
+    public String getDaxUrl() {
+        return daxUrl;
+    }
+
+    public void setDaxUrl(String daxUrl) {
+        this.daxUrl = daxUrl;
     }
 }

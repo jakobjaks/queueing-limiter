@@ -29,6 +29,10 @@
             "cpu": 0,
             "environment": [
                 {
+                    "name": "DAX_URL",
+                    "value": "queue-dax-cluster.4mgppy.clustercfg.dax.use1.cache.amazonaws.com:8111"
+                },
+                {
                     "name": "HAZELCAST_CLUSTER_IP",
                     "value": "52.55.2.229"
                 }
@@ -44,7 +48,7 @@
             "memoryReservation": null,
             "volumesFrom": [],
             "stopTimeout": null,
-            "image": "328945660164.dkr.ecr.us-east-1.amazonaws.com/queue-limiter-repo:1a4f4bd7d5b0f934e88add742bf522aec6f264ea",
+            "image": "328945660164.dkr.ecr.us-east-1.amazonaws.com/queue-limiter-repo:157ddaa20d56c686821e3f5b7ea3818611f6e3be",
             "startTimeout": null,
             "firelensConfiguration": null,
             "dependsOn": null,
@@ -70,7 +74,7 @@
     "compatibilities": [
         "EC2"
     ],
-    "taskDefinitionArn": "arn:aws:ecs:us-east-1:328945660164:task-definition/queue-limiter-task:24",
+    "taskDefinitionArn": "arn:aws:ecs:us-east-1:328945660164:task-definition/queue-limiter-task:27",
     "family": "queue-limiter-task",
     "requiresAttributes": [
         {
@@ -98,7 +102,7 @@
     ],
     "networkMode": null,
     "cpu": "2000",
-    "revision": 24,
+    "revision": 27,
     "status": "ACTIVE",
     "inferenceAccelerators": null,
     "proxyConfiguration": null,

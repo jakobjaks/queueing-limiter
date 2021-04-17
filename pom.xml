@@ -138,6 +138,11 @@
             <artifactId>amazon-sqs-java-messaging-lib</artifactId>
             <version>1.0.8</version>
         </dependency>
+        <dependency>
+            <groupId>com.amazonaws</groupId>
+            <artifactId>amazon-dax-client</artifactId>
+            <version>1.0.221844.0</version>
+        </dependency>
 
         <!-- The client -->
         <dependency>
