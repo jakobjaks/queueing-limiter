@@ -17,6 +17,11 @@
                     "hostPort": 8082,
                     "protocol": "tcp",
                     "containerPort": 8082
+                },
+                {
+                    "hostPort": 9093,
+                    "protocol": "tcp",
+                    "containerPort": 9093
                 }
             ],
             "command": null,
@@ -35,11 +40,11 @@
             "workingDirectory": null,
             "secrets": null,
             "dockerSecurityOptions": null,
-            "memory": 500,
+            "memory": 2000,
             "memoryReservation": null,
             "volumesFrom": [],
             "stopTimeout": null,
-            "image": "328945660164.dkr.ecr.us-east-1.amazonaws.com/queue-limiter-repo:c5fed29e2be01795443926033ac8d106dc46d765",
+            "image": "328945660164.dkr.ecr.us-east-1.amazonaws.com/queue-limiter-repo:1a4f4bd7d5b0f934e88add742bf522aec6f264ea",
             "startTimeout": null,
             "firelensConfiguration": null,
             "dependsOn": null,
@@ -60,12 +65,12 @@
         }
     ],
     "placementConstraints": [],
-    "memory": "500",
+    "memory": "2000",
     "taskRoleArn": "arn:aws:iam::328945660164:role/ecsTaskExecutionRole",
     "compatibilities": [
         "EC2"
     ],
-    "taskDefinitionArn": "arn:aws:ecs:us-east-1:328945660164:task-definition/queue-limiter-task:18",
+    "taskDefinitionArn": "arn:aws:ecs:us-east-1:328945660164:task-definition/queue-limiter-task:24",
     "family": "queue-limiter-task",
     "requiresAttributes": [
         {
@@ -92,8 +97,8 @@
         "EC2"
     ],
     "networkMode": null,
-    "cpu": "500",
-    "revision": 18,
+    "cpu": "2000",
+    "revision": 24,
     "status": "ACTIVE",
     "inferenceAccelerators": null,
     "proxyConfiguration": null,

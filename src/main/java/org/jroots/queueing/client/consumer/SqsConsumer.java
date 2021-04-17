@@ -4,9 +4,10 @@ import com.amazonaws.services.sqs.AmazonSQS;
 import com.amazonaws.services.sqs.AmazonSQSClientBuilder;
 import com.amazonaws.services.sqs.model.ReceiveMessageRequest;
 import com.amazonaws.services.sqs.model.SendMessageRequest;
-import com.codahale.metrics.Meter;
 import com.codahale.metrics.MetricRegistry;
-import com.codahale.metrics.jmx.JmxReporter;
+import io.prometheus.client.CollectorRegistry;
+import io.prometheus.client.Counter;
+import io.prometheus.client.dropwizard.DropwizardExports;
 import io.prometheus.client.exporter.HTTPServer;
 import org.jroots.queueing.QueueLimiterConfiguration;
 import org.jroots.queueing.api.Message;
@@ -26,7 +27,7 @@ public class SqsConsumer implements QueueConsumer {
     private final AmazonSQS amazonSQSClient;
 
     private final MetricRegistry metrics = new MetricRegistry();
-    private final Meter requests = metrics.meter("requests");
+    private final Counter counter = Counter.build().namespace("queue-cluster").name("limiter-messages").help("my counter").register();
     private final Executor executor;
 
     private final Logger logger = LoggerFactory.getLogger(SqsConsumer.class);
@@ -41,6 +42,7 @@ public class SqsConsumer implements QueueConsumer {
         } catch (IOException e) {
             e.printStackTrace();
         }
+        CollectorRegistry.defaultRegistry.register(new DropwizardExports(metrics));
     }
 
     @Override
@@ -52,7 +54,7 @@ public class SqsConsumer implements QueueConsumer {
             while (true) {
                 try {
                     logger.info("In while loop for executor");
-                    var request = new ReceiveMessageRequest().withWaitTimeSeconds(20).withQueueUrl(sqsUrl);
+                    var request = new ReceiveMessageRequest().withMaxNumberOfMessages(5).withWaitTimeSeconds(20).withQueueUrl(sqsUrl);
 
                     var messages = amazonSQSClient.receiveMessage(request).getMessages();
 
@@ -60,7 +62,7 @@ public class SqsConsumer implements QueueConsumer {
                         executor.execute(() -> {
                             logger.info("Started executor");
                             var internalMessage = convertToInternalMessage(message);
-                            requests.mark();
+                            counter.inc();
                             handlerService.handlePayload(internalMessage)
                                     .thenAccept(timeLeft -> {
                                         logger.info("Deleting message with id {}", internalMessage.getUUID());
