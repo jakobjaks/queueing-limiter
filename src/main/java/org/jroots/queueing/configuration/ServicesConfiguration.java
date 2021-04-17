@@ -1,6 +1,9 @@
 package org.jroots.queueing.configuration;
 
+import com.codahale.metrics.MetricRegistry;
 import io.dropwizard.setup.Environment;
+import io.prometheus.client.CollectorRegistry;
+import io.prometheus.client.dropwizard.DropwizardExports;
 import org.jroots.queueing.QueueLimiterConfiguration;
 import org.jroots.queueing.client.consumer.QueueConsumer;
 import org.jroots.queueing.client.consumer.SqsConsumer;
@@ -43,7 +46,7 @@ public class ServicesConfiguration {
 
     @Bean
     CacheService cacheService() {
-        return new CacheService(configuration);
+        return new CacheService(configuration, metricsRegistry());
     }
 
     @Bean
@@ -71,5 +74,12 @@ public class ServicesConfiguration {
         executor.setThreadNamePrefix("sqsExecutor");
         executor.initialize();
         return executor;
+    }
+
+    @Bean
+    public MetricRegistry metricsRegistry() {
+        MetricRegistry metrics = new MetricRegistry();
+        CollectorRegistry.defaultRegistry.register(new DropwizardExports(metrics));
+        return metrics;
     }
 }

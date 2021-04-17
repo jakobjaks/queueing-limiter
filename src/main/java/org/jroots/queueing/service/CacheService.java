@@ -1,5 +1,7 @@
 package org.jroots.queueing.service;
 
+import com.codahale.metrics.Counter;
+import com.codahale.metrics.MetricRegistry;
 import com.hazelcast.client.HazelcastClient;
 import com.hazelcast.client.config.ClientConfig;
 import com.hazelcast.core.HazelcastInstance;
@@ -12,7 +14,6 @@ import io.github.bucket4j.grid.GridBucketState;
 import io.github.bucket4j.grid.ProxyManager;
 import io.github.bucket4j.grid.RecoveryStrategy;
 import io.github.bucket4j.grid.hazelcast.Hazelcast;
-import io.prometheus.client.Gauge;
 import org.jroots.queueing.QueueLimiterConfiguration;
 import org.jroots.queueing.api.Message;
 import org.slf4j.Logger;
@@ -31,13 +32,15 @@ public class CacheService {
 
     private HazelcastInstance hazelcastInstance;
     private final QueueLimiterConfiguration configuration;
+    private MetricRegistry metricRegistry;
 
     private final Logger logger = LoggerFactory.getLogger(CacheService.class);
-    private final Gauge gauge = Gauge.build().namespace("queue_cluster").name("tokens_in_bucket").help("my gauge").register();
+    private final Counter tokenCounter;
 
-
-    public CacheService(QueueLimiterConfiguration configuration) {
+    public CacheService(QueueLimiterConfiguration configuration, MetricRegistry metricRegistry) {
         this.configuration = configuration;
+        this.metricRegistry = metricRegistry;
+        this.tokenCounter = metricRegistry.counter("token_counter");
     }
 
     private void startConnection() {
@@ -76,7 +79,7 @@ public class CacheService {
                     bucket.replaceConfiguration(newConfiguration, TokensInheritanceStrategy.AS_IS);
                 }
                 var tokens = bucket.getAvailableTokens();
-                gauge.set(tokens);
+                tokenCounter.inc();
 
                 logger.info("Getting existing bucket for identifier {}", message.getIdentifier());
                 logger.info("Numbers of tokens before consuming {}", tokens);
