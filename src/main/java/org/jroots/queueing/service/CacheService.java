@@ -12,6 +12,7 @@ import io.github.bucket4j.grid.GridBucketState;
 import io.github.bucket4j.grid.ProxyManager;
 import io.github.bucket4j.grid.RecoveryStrategy;
 import io.github.bucket4j.grid.hazelcast.Hazelcast;
+import io.prometheus.client.Gauge;
 import org.jroots.queueing.QueueLimiterConfiguration;
 import org.jroots.queueing.api.Message;
 import org.slf4j.Logger;
@@ -32,6 +33,8 @@ public class CacheService {
     private final QueueLimiterConfiguration configuration;
 
     private final Logger logger = LoggerFactory.getLogger(CacheService.class);
+    private final Gauge gauge = Gauge.build().namespace("queue_cluster").name("tokens_in_bucket").help("my gauge").register();
+
 
     public CacheService(QueueLimiterConfiguration configuration) {
         this.configuration = configuration;
@@ -72,9 +75,11 @@ public class CacheService {
                             .build();
                     bucket.replaceConfiguration(newConfiguration, TokensInheritanceStrategy.AS_IS);
                 }
+                var tokens = bucket.getAvailableTokens();
+                gauge.set(tokens);
 
                 logger.info("Getting existing bucket for identifier {}", message.getIdentifier());
-                logger.info("Numbers of tokens before consuming {}", bucket.getAvailableTokens());
+                logger.info("Numbers of tokens before consuming {}", tokens);
 
                 secondsLeft = TimeUnit.NANOSECONDS.toSeconds(bucket.estimateAbilityToConsume(1).getNanosToWaitForRefill());
                 if (secondsLeft < 60) {

@@ -54,7 +54,7 @@ public class SqsConsumer implements QueueConsumer {
             while (true) {
                 try {
                     logger.info("In while loop for executor");
-                    var request = new ReceiveMessageRequest().withMaxNumberOfMessages(5).withWaitTimeSeconds(20).withQueueUrl(sqsUrl);
+                    var request = new ReceiveMessageRequest().withWaitTimeSeconds(20).withQueueUrl(sqsUrl);
 
                     var messages = amazonSQSClient.receiveMessage(request).getMessages();
 
