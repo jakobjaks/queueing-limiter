@@ -72,7 +72,8 @@ public class CacheService {
                 var bucket = bucketO.get();
                 var bandWidths = map.get(identifier).getConfiguration().getBandwidths();
                 if (bandWidths[0].getCapacity() != limit) {
-                    Bandwidth newLimit = Bandwidth.simple(limit, Duration.ofSeconds(1));
+                    logger.info("Changing limits to {}", limit);
+                    Bandwidth newLimit = Bandwidth.simple(limit, Duration.ofSeconds(10));
                     BucketConfiguration newConfiguration = Bucket4j.configurationBuilder()
                             .addLimit(newLimit)
                             .build();
@@ -80,12 +81,12 @@ public class CacheService {
                 }
                 var tokens = bucket.getAvailableTokens();
                 tokenCounter.inc();
-
                 logger.info("Getting existing bucket for identifier {}", message.getIdentifier());
                 logger.info("Numbers of tokens before consuming {}", tokens);
 
                 secondsLeft = TimeUnit.NANOSECONDS.toSeconds(bucket.estimateAbilityToConsume(1).getNanosToWaitForRefill());
                 if (secondsLeft < 60) {
+                    logger.info("Consuming one token");
                     bucket.consumeIgnoringRateLimits(1);
                 }
                 logger.info("Numbers of tokens after consuming {}", bucket.getAvailableTokens());
