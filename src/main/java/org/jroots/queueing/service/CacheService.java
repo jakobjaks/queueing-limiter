@@ -73,7 +73,7 @@ public class CacheService {
                 var bandWidths = map.get(identifier).getConfiguration().getBandwidths();
                 if (bandWidths[0].getCapacity() != limit) {
                     logger.info("Changing limits to {}", limit);
-                    Bandwidth newLimit = Bandwidth.simple(limit, Duration.ofSeconds(10));
+                    Bandwidth newLimit = Bandwidth.simple(limit, Duration.ofSeconds(1));
                     BucketConfiguration newConfiguration = Bucket4j.configurationBuilder()
                             .addLimit(newLimit)
                             .build();
@@ -94,7 +94,7 @@ public class CacheService {
             } else {
                 logger.info("Creating a new bucket");
                 var bucket = Bucket4j.extension(Hazelcast.class).builder()
-                        .addLimit(Bandwidth.simple(limit, Duration.ofSeconds(10)))
+                        .addLimit(Bandwidth.simple(limit, Duration.ofSeconds(1)))
                         .build(map, identifier, RecoveryStrategy.THROW_BUCKET_NOT_FOUND_EXCEPTION);
                 bucket.tryConsume(1);
                 secondsLeft = TimeUnit.NANOSECONDS.toSeconds(bucket.estimateAbilityToConsume(1).getNanosToWaitForRefill());
