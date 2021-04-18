@@ -94,7 +94,7 @@ public class CacheService {
             } else {
                 logger.info("Creating a new bucket");
                 var bucket = Bucket4j.extension(Hazelcast.class).builder()
-                        .addLimit(Bandwidth.simple(limit, Duration.ofSeconds(1)))
+                        .addLimit(Bandwidth.simple(limit, Duration.ofSeconds(10)))
                         .build(map, identifier, RecoveryStrategy.THROW_BUCKET_NOT_FOUND_EXCEPTION);
                 bucket.tryConsume(1);
                 secondsLeft = TimeUnit.NANOSECONDS.toSeconds(bucket.estimateAbilityToConsume(1).getNanosToWaitForRefill());
