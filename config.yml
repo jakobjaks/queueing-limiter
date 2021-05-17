@@ -1,0 +1,22 @@
+server:
+  applicationConnectors:
+    - type: http
+      port: 8082
+  adminConnectors:
+    - type: http
+      port: 8083
+
+logging:
+  level: INFO
+  loggers:
+    org.jroots.queueing: DEBUG
+
+template: Hello, %s!
+defaultName: Stranger
+
+inboundSqsUrl: https://sqs.us-east-1.amazonaws.com/328945660164/rate_limiter_entry_queue
+outboundSqsUrl: https://sqs.us-east-1.amazonaws.com/328945660164/rate_limiter_exit_queue
+limitsTableName: rate_limiter_limits
+daxUrl: ${DAX_URL}
+
+hazelcastClusterIp: ${HAZELCAST_CLUSTER_IP}

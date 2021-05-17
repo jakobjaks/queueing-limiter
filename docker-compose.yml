@@ -1,0 +1,17 @@
+version: "3.9"
+services:
+  queue-gateway:
+    image: "queue-gateway:1.0"
+    ports:
+      - 8080:8080
+  queue-limiter:
+    image: "queue-limiter:1.0"
+    ports:
+      - 8080:8081
+    depends_on:
+      - "rabbitmq"
+  rabbitmq:
+    image: rabbitmq
+    ports:
+      - 5672:5672
+      - 15672:15672
